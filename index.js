@@ -11,22 +11,45 @@ const page = await browser.newPage();
 await page.goto('https://mktoys.com', {
         waitUntil: "domcontentloaded",
     });
-
-    // await page.click('a[href="/FirstPage/Account"]');
-    // await page.locator('input#loginUsername').fill('samaq');
-    // await page.locator('input#loginPassword').fill('working');
-    // await page.click('button.signIn');
-
+// 
+    await page.click('a[href="/FirstPage/Account"]');
+    await page.locator('input#loginUsername').fill('kesea');
+    await page.locator('input#loginPassword').fill('739824');
     
+    await page.click('button.signIn');
+    try {
+        await page.waitForNetworkIdle({
+          networkIdleTimeout: 5000, // Wait for 5 seconds of network inactivity
+          networkIdleInflight: 0    // Wait until there are no more in-flight requests
+        });
+        // Code to execute after network becomes idle
+      } catch (error) {
+        console.error('Timeout waiting for network to become idle:', error);
+      }
+    console.log('logged in')
+    // await page.waitForNavigation()
+    // await page.waitForNetworkIdle();
+    // page.setDefaultTimeout(10000);
+    await page.evaluate(() => {
+        
+        return new Promise((resolve) => {
+            console.log('waiting')
+            setTimeout(resolve, 5000); // Adjust the delay time as needed
+        });
+    });
+    
+
     await page.locator('input#content').fill('robot');
+    console.log('waiting for search')
     await page.click('div.search-button');
-    await page.waitForNavigation();
+    console.log('search btton clicked')
+    
 
     let nextPage = true;
     const allInfo = [];
 
     while(nextPage){
-        await waitForNetworkIdle();
+        await page.waitForNetworkIdle();
 
         const detailsOnPage =await page.evaluate(() => {
             
@@ -47,7 +70,7 @@ await page.goto('https://mktoys.com', {
         allInfo.push(...detailsOnPage);
         
         try {
-            const nextPageLink = await page.waitForSelector('button.btn-next]', { timeout: 10000 });
+            const nextPageLink = await page.waitForSelector('button.btn-next', { timeout: 10000 });
             await nextPageLink.click();
             await page.waitForNavigation();
         } catch (error) {
