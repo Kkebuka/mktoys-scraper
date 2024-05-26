@@ -44,6 +44,14 @@ await page.goto('https://mktoys.com', {
     await page.click('div.search-button');
     console.log('search btton clicked')
     
+    const pages = await browser.pages();
+    const newPage = pages[pages.length - 1];
+
+    // Wait for the search results to load in the new tab
+    await newPage.waitForSelector('.organic-outer');
+
+    // Switch to the new tab
+    await newPage.bringToFront();
 
     let nextPage = true;
     const allInfo = [];
