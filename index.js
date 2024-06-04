@@ -43,15 +43,15 @@ await page.goto('https://mktoys.com', {
     console.log('waiting for search')
     await page.click('div.search-button');
     console.log('search btton clicked')
-    
-    const pages = await browser.pages();
-    const newPage = pages[pages.length - 1];
 
-    // Wait for the search results to load in the new tab
-    await newPage.waitForSelector('.organic-outer');
+    await browser.waitForTarget(target => target.type() === 'page');
 
-    // Switch to the new tab
-    await newPage.bringToFront();
+  // Get the new page instance
+  const targets = browser.targets();
+  newPage = await targets[targets.length - 1].page();
+
+  // Wait for new page to finish loading
+  await newPage.waitForLoadState('networkidle2');
 
     let nextPage = true;
     const allInfo = [];
