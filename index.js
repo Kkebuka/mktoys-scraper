@@ -19,17 +19,17 @@ await page.goto('https://mktoys.com', {
     await page.click('button.signIn');
     try {
         await page.waitForNetworkIdle({
-          networkIdleTimeout: 5000, // Wait for 5 seconds of network inactivity
-          networkIdleInflight: 0    // Wait until there are no more in-flight requests
+          networkIdleTimeout: 5000,
+          networkIdleInflight: 0   
         });
         // Code to execute after network becomes idle
       } catch (error) {
         console.error('Timeout waiting for network to become idle:', error);
       }
     console.log('logged in')
-    // await page.waitForNavigation()
-    // await page.waitForNetworkIdle();
-    // page.setDefaultTimeout(10000);
+    
+    
+    
     await page.evaluate(() => {
         
         return new Promise((resolve) => {
@@ -68,7 +68,7 @@ await page.goto('https://mktoys.com', {
                 const imageSrc = singleDetail.querySelector('.leftImg').getAttribute('src');
                 const name = singleDetail.querySelector('i').innerHTML;
                 const newPrice = singleDetail.querySelector('.el-icon-money').innerHTML;
-                // console.log(name, newPrice)
+                
                 return{imageSrc, name, newPrice};
             });
             console.log(info)
